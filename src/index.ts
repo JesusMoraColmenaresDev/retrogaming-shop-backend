@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { User } from './entities/userModel';
 import { sequelize } from './database';
+import { registerController, registerValidation } from './entities/userController';
 
 dotenv.config();
 
@@ -16,6 +17,8 @@ app.use(express.json());
 app.get('/', (req: Request, res: Response) => {
   res.json({ message: 'Hola desde el backend!' });
 });
+
+app.post('/register', registerValidation, registerController);
 
 sequelize.sync().then(() => {
   app.listen(port, () => {

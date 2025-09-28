@@ -7,34 +7,34 @@ export const User = sequelize.define('User', {
         autoIncrement: true,
         primaryKey: true,
     },
-    nombre: {
+    firstName: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    apellido: {
+    lastName: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    correo_electronico: {
+    email: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
     },
-    numero_telefono: {
+    phoneNumber: {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    pais: {
+    country: {
         type: DataTypes.STRING,
         allowNull: true,
     },
-    contraseña_hash: {
+    passwordHash: {
         type: DataTypes.STRING,
         allowNull: false,
     },
-    rol: {
-        type: DataTypes.ENUM('usuario', 'admin'),
+    role: {
+        type: DataTypes.ENUM('user', 'admin'),
         allowNull: false,
-        defaultValue: 'usuario',
+        defaultValue: 'user',
     },
 });
