@@ -13,7 +13,7 @@ interface RegisterData {
 export const registerUser = async (data: RegisterData) => {
   const { firstName, lastName, email, phoneNumber, country, password } = data;
 
-  // Validate unique email
+  // Validar qeu el correo no este registrado
   const existingUser = await User.findOne({ where: { email } });
   if (existingUser) {
     throw new Error('El correo electrónico ya está registrado.');
@@ -22,7 +22,7 @@ export const registerUser = async (data: RegisterData) => {
   // Hash password
   const passwordHash = await bcrypt.hash(password, 10);
 
-  // Create user
+  // Crear usuario
   await User.create({
     firstName,
     lastName,

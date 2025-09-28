@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import { User } from './entities/user/userModel';
 import { sequelize } from './database';
 import { registerController, registerValidation } from './entities/register/registerController';
+import { loginController, loginValidation } from './entities/login/loginController';
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.post('/register', registerValidation, registerController);
+app.post('/login', loginValidation, loginController);
 
 sequelize.sync().then(() => {
   app.listen(port, () => {
