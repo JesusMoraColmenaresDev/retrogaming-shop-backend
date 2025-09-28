@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { User } from './userModel';
+import { User } from '../user/userModel';
 
 interface RegisterData {
   firstName: string;

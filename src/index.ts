@@ -1,9 +1,9 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { User } from './entities/userModel';
+import { User } from './entities/user/userModel';
 import { sequelize } from './database';
-import { registerController, registerValidation } from './entities/userController';
+import { registerController, registerValidation } from './entities/register/registerController';
 
 dotenv.config();
 

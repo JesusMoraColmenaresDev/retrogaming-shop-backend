@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
-import { registerUser } from './userService';
+import { registerUser } from './registerService';
 
 // Validaciones con express-validator
 export const registerValidation = [
