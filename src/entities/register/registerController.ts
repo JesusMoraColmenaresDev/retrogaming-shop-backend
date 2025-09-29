@@ -4,15 +4,15 @@ import { registerUser } from './registerService';
 
 // Validaciones con express-validator
 export const registerValidation = [
-    body('firstName').notEmpty().withMessage('El nombre es obligatorio'),
-    body('lastName').notEmpty().withMessage('El apellido es obligatorio'),
-    body('email').isEmail().withMessage('Correo electrónico inválido'),
-    body('phoneNumber').notEmpty().withMessage('El número de teléfono es obligatorio'),
-    body('country').notEmpty().withMessage('El país es obligatorio'),
-    body('password').isLength({ min: 8 }).withMessage('La contraseña debe tener al menos 8 caracteres'),
+    body('firstName').notEmpty().withMessage({ code: 'FIRST_NAME_REQUIRED' }),
+    body('lastName').notEmpty().withMessage({ code: 'LAST_NAME_REQUIRED' }),
+    body('email').isEmail().withMessage({ code: 'EMAIL_INVALID' }),
+    body('phoneNumber').notEmpty().withMessage({ code: 'PHONE_NUMBER_REQUIRED' }),
+    body('country').notEmpty().withMessage({ code: 'COUNTRY_REQUIRED' }),
+    body('password').isLength({ min: 8 }).withMessage({ code: 'PASSWORD_TOO_SHORT' }),
     body('confirmPassword').custom((value, { req }) => {
         if (value !== req.body.password) {
-            throw new Error('Las contraseñas no coinciden');
+            throw { code: 'PASSWORDS_DO_NOT_MATCH' };
         }
         return true;
     }),
@@ -22,13 +22,16 @@ export const registerValidation = [
 export const registerController = async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        return res.status(400).json({ code: "VALIDATION_ERROR", errors: errors.array() });
     }
 
     try {
         await registerUser(req.body);
-        res.status(201).json({ message: 'Usuario registrado exitosamente.' });
+        res.status(201).json({ code: "USER_REGISTERED_SUCCESSFULLY" });
     } catch (error: any) {
-        res.status(400).json({ error: error.message || 'Error al registrar el usuario.' });
+        if (error.code) {
+            return res.status(400).json({ code: error.code });
+        }
+        return res.status(400).json({ code: "REGISTRATION_ERROR" });
     }
 };

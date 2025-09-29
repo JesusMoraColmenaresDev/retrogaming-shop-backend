@@ -13,13 +13,13 @@ export const loginUser = async (data: LoginData) => {
   // Buscar usuario por email
   const user = await User.findOne({ where: { email } });
   if (!user) {
-    throw new Error('Correo o contraseña inválido.');
+    throw { code: 'INVALID_CREDENTIALS' };
   }
 
   // Comparar contraseñas
   const isMatch = await bcrypt.compare(password, user.getDataValue('passwordHash'));
   if (!isMatch) {
-    throw new Error('Correo o contraseña inválido.');
+    throw { code: 'INVALID_CREDENTIALS' };
   }
 
   // Generar JWT

@@ -16,7 +16,7 @@ export const registerUser = async (data: RegisterData) => {
   // Validar qeu el correo no este registrado
   const existingUser = await User.findOne({ where: { email } });
   if (existingUser) {
-    throw new Error('El correo electrónico ya está registrado.');
+    throw { code: 'EMAIL_ALREADY_EXISTS' };
   }
 
   // Hash password
