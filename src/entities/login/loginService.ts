@@ -22,11 +22,15 @@ export const loginUser = async (data: LoginData) => {
     throw { code: 'INVALID_CREDENTIALS' };
   }
 
-  // Generar JWT
+  // Generar JWT con todos los campos del usuario excepto la contraseña
   const token = jwt.sign(
     {
       id: user.getDataValue('id'),
+      firstName: user.getDataValue('firstName'),
+      lastName: user.getDataValue('lastName'),
       email: user.getDataValue('email'),
+      phoneNumber: user.getDataValue('phoneNumber'),
+      country: user.getDataValue('country'),
       role: user.getDataValue('role'),
     },
     process.env.JWT_SECRET || 'secretkey',
