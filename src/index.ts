@@ -6,6 +6,14 @@ import { registerController, registerValidation } from './entities/register/regi
 import { loginController, loginValidation } from './entities/login/loginController';
 import { authenticateJWT } from './middlewares/authenticate';
 import { getCurrentUserController } from './entities/user/userController';
+import { createGameController, deleteGameController, gameValidation, getAllGamesController, getGameByIdController, updateGameController } from './entities/game/gameController';
+import { createGenreController } from './entities/genre/genreController';
+import { createPlatformController } from './entities/platform/platformController';
+import './entities/platform/platformModel';
+import './entities/genre/genreModel';
+import './entities/manufacturer/manufacturerModel';
+import './entities/game/gameModel';
+import './entities/user/userModel';
 
 dotenv.config();
 
@@ -25,7 +33,17 @@ app.post('/login', loginValidation, loginController);
 
 app.get('/me', authenticateJWT, getCurrentUserController);
 
-sequelize.sync().then(() => {
+app.post('/games', authenticateJWT, gameValidation, createGameController);
+app.get('/games', authenticateJWT, getAllGamesController);
+app.get('/games/:id', authenticateJWT, getGameByIdController);
+app.patch('/games/:id', authenticateJWT, updateGameController);
+app.delete('/games/:id', authenticateJWT, deleteGameController);
+app.post('/genres', authenticateJWT, createGenreController);
+app.post('/platforms', authenticateJWT, createPlatformController);
+
+
+// solo en desarrollo, en produccion lo haria con migraciones
+sequelize.sync({ alter: true }).then(() => {
   app.listen(port, () => {
     console.log(`Servidor corriendo en el puerto ${port}`);
   });

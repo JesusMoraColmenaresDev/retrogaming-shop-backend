@@ -1,3 +1,13 @@
+export type UserAttributes = {
+  id?: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber?: string;
+  country?: string;
+  passwordHash: string;
+  role: 'user' | 'admin';
+};
 // Tipos para la información del usuario en el JWT y en el backend
 
 export type UserJwtPayload = {
