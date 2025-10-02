@@ -1,3 +1,4 @@
+import { createManufacturerController } from './entities/manufacturer/manufacturerController';
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -9,11 +10,13 @@ import { getCurrentUserController } from './entities/user/userController';
 import { createGameController, deleteGameController, gameValidation, getAllGamesController, getGameByIdController, updateGameController } from './entities/game/gameController';
 import { createGenreController } from './entities/genre/genreController';
 import { createPlatformController } from './entities/platform/platformController';
+import { createConsoleController, getAllConsolesController, getConsoleByIdController, updateConsoleController, deleteConsoleController, consoleValidation } from './entities/console/consoleController';
 import './entities/platform/platformModel';
 import './entities/genre/genreModel';
 import './entities/manufacturer/manufacturerModel';
 import './entities/game/gameModel';
 import './entities/user/userModel';
+import './entities/console/consoleModel';
 
 dotenv.config();
 
@@ -34,12 +37,18 @@ app.post('/login', loginValidation, loginController);
 app.get('/me', authenticateJWT, getCurrentUserController);
 
 app.post('/games', authenticateJWT, gameValidation, createGameController);
+app.post('/manufacturers', authenticateJWT, createManufacturerController);
 app.get('/games', authenticateJWT, getAllGamesController);
 app.get('/games/:id', authenticateJWT, getGameByIdController);
 app.patch('/games/:id', authenticateJWT, updateGameController);
 app.delete('/games/:id', authenticateJWT, deleteGameController);
 app.post('/genres', authenticateJWT, createGenreController);
 app.post('/platforms', authenticateJWT, createPlatformController);
+app.post('/consoles', authenticateJWT, consoleValidation, createConsoleController);
+app.get('/consoles', authenticateJWT, getAllConsolesController);
+app.get('/consoles/:id', authenticateJWT, getConsoleByIdController);
+app.patch('/consoles/:id', authenticateJWT, consoleValidation, updateConsoleController);
+app.delete('/consoles/:id', authenticateJWT, deleteConsoleController);
 
 
 // solo en desarrollo, en produccion lo haria con migraciones

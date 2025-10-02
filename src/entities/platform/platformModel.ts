@@ -14,16 +14,4 @@ export const Platform = sequelize.define<PlatformInstance>('Platform', {
     allowNull: false,
     unique: true,
   },
-  imageUrl1: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
-  imageUrl2: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
-  imageUrl3: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
 });

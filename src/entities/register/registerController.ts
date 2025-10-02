@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 import { registerUser } from './registerService';
+import { ApiError } from '../../utils/ApiError';
 
 // Validaciones con express-validator
 export const registerValidation = [
@@ -12,7 +13,7 @@ export const registerValidation = [
     body('password').isLength({ min: 8 }).withMessage({ code: 'PASSWORD_TOO_SHORT' }),
     body('confirmPassword').custom((value, { req }) => {
         if (value !== req.body.password) {
-            throw { code: 'PASSWORDS_DO_NOT_MATCH' };
+            throw new ApiError('PASSWORDS_DO_NOT_MATCH');
         }
         return true;
     }),
@@ -28,8 +29,8 @@ export const registerController = async (req: Request, res: Response) => {
     try {
         await registerUser(req.body);
         res.status(201).json({ code: "USER_REGISTERED_SUCCESSFULLY" });
-    } catch (error: any) {
-        if (error.code) {
+    } catch (error) {
+        if (error instanceof ApiError) {
             return res.status(400).json({ code: error.code });
         }
         return res.status(400).json({ code: "REGISTRATION_ERROR" });

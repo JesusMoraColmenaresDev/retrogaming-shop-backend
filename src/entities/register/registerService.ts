@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt';
 import { User } from '../user/userModel';
+import { ApiError } from '../../utils/ApiError';
 
 interface RegisterData {
   firstName: string;
@@ -13,10 +14,10 @@ interface RegisterData {
 export const registerUser = async (data: RegisterData) => {
   const { firstName, lastName, email, phoneNumber, country, password } = data;
 
-  // Validar qeu el correo no este registrado
+  // Validar que el correo no esté registrado
   const existingUser = await User.findOne({ where: { email } });
   if (existingUser) {
-    throw { code: 'EMAIL_ALREADY_EXISTS' };
+    throw new ApiError('EMAIL_ALREADY_EXISTS');
   }
 
   // Hash password

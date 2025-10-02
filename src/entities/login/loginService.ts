@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { User } from '../user/userModel';
+import { ApiError } from '../../utils/ApiError';
 
 interface LoginData {
   email: string;
@@ -13,13 +14,13 @@ export const loginUser = async (data: LoginData) => {
   // Buscar usuario por email
   const user = await User.findOne({ where: { email } });
   if (!user) {
-    throw { code: 'INVALID_CREDENTIALS' };
+    throw new ApiError('INVALID_CREDENTIALS');
   }
 
   // Comparar contraseñas
   const isMatch = await bcrypt.compare(password, user.getDataValue('passwordHash'));
   if (!isMatch) {
-    throw { code: 'INVALID_CREDENTIALS' };
+    throw new ApiError('INVALID_CREDENTIALS');
   }
 
   // Generar JWT con todos los campos del usuario excepto la contraseña

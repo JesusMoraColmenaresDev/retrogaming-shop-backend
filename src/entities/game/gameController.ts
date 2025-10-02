@@ -2,6 +2,7 @@
 import { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
 import { createGame, getAllGames, getGameById, updateGame, deleteGame } from './gameService';
+import { ApiError } from '../../utils/ApiError';
 import { Platform } from '../platform/platformModel';
 import { Genre } from '../genre/genreModel';
 
@@ -25,36 +26,44 @@ export const createGameController = async (req: Request, res: Response) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
+
   const gameData = req.body;
 
-  // Validar que platformId existe
-  const platform = await Platform.findByPk(gameData.platformId);
-  if (!platform) {
-    return res.status(400).json({ code: 'PLATFORM_NOT_FOUND'});
+  try {
+    const newGame = await createGame(gameData);
+    res.status(201).json(newGame);
+  } catch (err) {
+    if (err instanceof ApiError) {
+      return res.status(400).json({ code: err.code });
+    }
+    res.status(500).json({ code: 'GAME_CREATE_ERROR' });
   }
-
-  // Validar que genreId existe
-  const genre = await Genre.findByPk(gameData.genreId);
-  if (!genre) {
-    return res.status(400).json({ code: 'GENRE_NOT_FOUND'});
-  }
-
-  const newGame = await createGame(gameData);
-  res.status(201).json(newGame);
 };
 
 export const getAllGamesController = async (req: Request, res: Response) => {
-  const games = await getAllGames();
-  res.status(200).json(games);
+  const page = req.query.page ? parseInt(req.query.page as string, 10) : 1;
+  const limit = 4;
+  const offset = (page - 1) * limit;
+  try {
+    const { games, total } = await getAllGames(limit, offset);
+    const totalPages = Math.ceil(total / limit);
+    res.status(200).json({ games, total, totalPages, page });
+  } catch (err) {
+    res.status(500).json({ code: 'GAME_LIST_ERROR' });
+  }
 };
 
 export const getGameByIdController = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const game = await getGameById(Number(id));
-  if (!game) {
-    return res.status(404).json({ code: 'GAME_NOT_FOUND' });
+  try {
+    const { id } = req.params;
+    const game = await getGameById(Number(id));
+    if (!game) {
+      return res.status(404).json({ code: 'GAME_NOT_FOUND' });
+    }
+    res.status(200).json(game);
+  } catch (err) {
+    res.status(500).json({ code: 'GAME_GET_ERROR' });
   }
-  res.status(200).json(game);
 };
 
 export const updateGameController = async (req: Request, res: Response) => {

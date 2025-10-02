@@ -3,20 +3,35 @@ import { Genre } from '../genre/genreModel';
 import { Platform } from '../platform/platformModel';
 import { Game } from './gameModel';
 import { GameAttributes } from './gameTypes';
+import { ApiError } from '../../utils/ApiError';
 
 export const createGame = async (gameData: GameAttributes) => {
-    await Game.create(gameData);
-    return gameData;
+    // Validar que platformId existe
+    const platform = await Platform.findByPk(gameData.platformId);
+    if (!platform) {
+        throw new ApiError('PLATFORM_NOT_FOUND');
+    }
+
+    // Validar que genreId existe
+    const genre = await Genre.findByPk(gameData.genreId);
+    if (!genre) {
+        throw new ApiError('GENRE_NOT_FOUND');
+    }
+
+    return Game.create(gameData);
 };
 
-export const getAllGames = async () => {
-    return Game.findAll({
+export const getAllGames = async (limit: number, offset: number) => {
+    const { count, rows } = await Game.findAndCountAll({
         attributes: { exclude: ['platformId', 'genreId'] },
         include: [
             { model: Platform, as: 'platform' },
             { model: Genre, as: 'genre' }
-        ]
+        ],
+        limit,
+        offset,
     });
+    return { games: rows, total: count };
 };
 
 export const getGameById = async (id: number) => {
