@@ -51,9 +51,10 @@ app.patch('/consoles/:id', authenticateJWT, consoleValidation, updateConsoleCont
 app.delete('/consoles/:id', authenticateJWT, deleteConsoleController);
 
 
-// solo en desarrollo, en produccion lo haria con migraciones
-sequelize.sync({ alter: true }).then(() => {
+(async () => {
+  //await sequelize.drop();
+  //await sequelize.sync({ alter: true });
   app.listen(port, () => {
     console.log(`Servidor corriendo en el puerto ${port}`);
   });
-});
+})();
