@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { createGenre } from './genreService';
+import { createGenre, getAllGenres } from './genreService';
 import { ApiError } from '../../utils/ApiError';
 
 export const createGenreController = async (req: Request, res: Response) => {
@@ -18,3 +18,11 @@ export const createGenreController = async (req: Request, res: Response) => {
   }
 };
 
+export const getAllGenresController = async (req: Request, res: Response) => {
+  try {
+    const genres = await getAllGenres();
+    res.status(200).json(genres);
+  } catch (err) {
+    res.status(500).json({ code: 'GENRE_FETCH_ERROR' });
+  }
+};

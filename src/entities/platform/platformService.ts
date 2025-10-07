@@ -10,3 +10,6 @@ export const createPlatform = async (data: PlatformAttributes) => {
 	return Platform.create(data);
 };
 
+export const getAllPlatforms = async () => {
+	return Platform.findAll();
+};

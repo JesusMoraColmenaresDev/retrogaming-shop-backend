@@ -35,7 +35,13 @@ export const getAllGames = async (limit: number, offset: number) => {
 };
 
 export const getGameById = async (id: number) => {
-    return Game.findByPk(id);
+    //incluye a platform y genre
+    return Game.findByPk(id, {
+        include: [
+            { model: Platform, as: 'platform' },
+            { model: Genre, as: 'genre' }
+        ]
+    });
 };
 
 export const updateGame = async (id: number, gameData: GameAttributes) => {

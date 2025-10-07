@@ -8,8 +8,8 @@ import { loginController, loginValidation } from './entities/login/loginControll
 import { authenticateJWT } from './middlewares/authenticate';
 import { getCurrentUserController } from './entities/user/userController';
 import { createGameController, deleteGameController, gameValidation, getAllGamesController, getGameByIdController, updateGameController } from './entities/game/gameController';
-import { createGenreController } from './entities/genre/genreController';
-import { createPlatformController } from './entities/platform/platformController';
+import { createGenreController, getAllGenresController } from './entities/genre/genreController';
+import { createPlatformController, getAllPlatformsController } from './entities/platform/platformController';
 import { createConsoleController, getAllConsolesController, getConsoleByIdController, updateConsoleController, deleteConsoleController, consoleValidation } from './entities/console/consoleController';
 import './entities/platform/platformModel';
 import './entities/genre/genreModel';
@@ -49,6 +49,8 @@ app.get('/consoles', authenticateJWT, getAllConsolesController);
 app.get('/consoles/:id', authenticateJWT, getConsoleByIdController);
 app.patch('/consoles/:id', authenticateJWT, consoleValidation, updateConsoleController);
 app.delete('/consoles/:id', authenticateJWT, deleteConsoleController);
+app.get('/platforms', authenticateJWT, getAllPlatformsController);
+ app.get('/genres', authenticateJWT, getAllGenresController);
 
 
 (async () => {

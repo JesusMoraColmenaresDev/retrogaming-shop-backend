@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { createPlatform } from './platformService';
+import { createPlatform, getAllPlatforms } from './platformService';
 import { ApiError } from '../../utils/ApiError';
 
 export const createPlatformController = async (req: Request, res: Response) => {
@@ -18,3 +18,11 @@ export const createPlatformController = async (req: Request, res: Response) => {
   }
 };
 
+export const getAllPlatformsController = async (req: Request, res: Response) => {
+  try {
+    const platforms = await getAllPlatforms();
+    res.status(200).json(platforms);
+  } catch (err) {
+    res.status(500).json({ code: 'PLATFORM_FETCH_ERROR' });
+  }
+};

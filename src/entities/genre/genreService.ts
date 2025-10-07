@@ -10,3 +10,7 @@ export const createGenre = async (data: GenreAttributes) => {
 	return Genre.create(data);
 };
 
+export const getAllGenres = async () => {
+	return Genre.findAll();
+}
+
