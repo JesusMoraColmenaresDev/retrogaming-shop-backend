@@ -13,9 +13,16 @@ export const createConsole = async (data: ConsoleAttributes) => {
 };
 
 
-export const getAllConsoles = async (limit: number, offset: number) => {
+export const getAllConsoles = async (
+  limit: number,
+  offset: number,
+  manufacturerId?: number
+) => {
   const { count, rows } = await Console.findAndCountAll({
     attributes: { exclude: ['manufacturerId'] },
+    where: {
+      ...(manufacturerId && { manufacturerId }),
+    },
     include: [
       { model: Manufacturer, as: 'manufacturer' }
     ],
@@ -27,7 +34,11 @@ export const getAllConsoles = async (limit: number, offset: number) => {
 };
 
 export const getConsoleById = async (id: number) => {
-  return Console.findByPk(id);
+  return Console.findByPk(id, {
+    include: [
+      { model: Manufacturer, as: 'manufacturer' }
+    ]
+  });
 };
 
 export const updateConsole = async (id: number, data: ConsoleAttributes) => {

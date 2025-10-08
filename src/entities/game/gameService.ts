@@ -21,17 +21,26 @@ export const createGame = async (gameData: GameAttributes) => {
     return Game.create(gameData);
 };
 
-export const getAllGames = async (limit: number, offset: number) => {
-    const { count, rows } = await Game.findAndCountAll({
-        attributes: { exclude: ['platformId', 'genreId'] },
-        include: [
-            { model: Platform, as: 'platform' },
-            { model: Genre, as: 'genre' }
-        ],
-        limit,
-        offset,
-    });
-    return { games: rows, total: count };
+export const getAllGames = async (
+  limit: number,
+  offset: number,
+  platformId?: number,
+  genreId?: number
+) => {
+  const { count, rows } = await Game.findAndCountAll({
+    attributes: { exclude: ['platformId', 'genreId'] },
+    where: {
+      ...(platformId && { platformId }),
+      ...(genreId && { genreId }),
+    },
+    include: [
+      { model: Platform, as: 'platform' },
+      { model: Genre, as: 'genre' }
+    ],
+    limit,
+    offset,
+  });
+  return { games: rows, total: count };
 };
 
 export const getGameById = async (id: number) => {

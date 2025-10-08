@@ -10,3 +10,7 @@ export const createManufacturer = async (data: ManufacturerAttributes) => {
 	return Manufacturer.create(data);
 };
 
+export const getAllManufacturers = async () => {
+	return Manufacturer.findAll();
+}
+

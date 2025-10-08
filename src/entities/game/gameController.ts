@@ -44,8 +44,10 @@ export const getAllGamesController = async (req: Request, res: Response) => {
   const page = req.query.page ? parseInt(req.query.page as string, 10) : 1;
   const limit = 4;
   const offset = (page - 1) * limit;
+  const platformId = req.query.platform;
+  const genreId = req.query.genre;
   try {
-    const { games, total } = await getAllGames(limit, offset);
+    const { games, total } = await getAllGames(limit, offset, Number(platformId), Number(genreId));
     const totalPages = Math.ceil(total / limit);
     res.status(200).json({ games, total, totalPages, page });
   } catch (err) {

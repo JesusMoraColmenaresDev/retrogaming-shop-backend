@@ -35,8 +35,10 @@ export const getAllConsolesController = async (req: Request, res: Response) => {
   const page = parseInt(req.query.page as string) || 1;
   const limit = 4;
   const offset = (page - 1) * limit;
+  const manufacturerId = req.query.manufacturer 
+
   try {
-    const { consoles, total } = await getAllConsoles(limit, offset);
+    const { consoles, total } = await getAllConsoles(limit, offset, Number(manufacturerId));
     const totalPages = Math.ceil(total / limit);
     res.status(200).json({ consoles, total, totalPages, page });
   } catch (err) {

@@ -1,4 +1,4 @@
-import { createManufacturerController } from './entities/manufacturer/manufacturerController';
+import { createManufacturerController, getAllManufacturersController } from './entities/manufacturer/manufacturerController';
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -50,7 +50,8 @@ app.get('/consoles/:id', authenticateJWT, getConsoleByIdController);
 app.patch('/consoles/:id', authenticateJWT, consoleValidation, updateConsoleController);
 app.delete('/consoles/:id', authenticateJWT, deleteConsoleController);
 app.get('/platforms', authenticateJWT, getAllPlatformsController);
- app.get('/genres', authenticateJWT, getAllGenresController);
+app.get('/genres', authenticateJWT, getAllGenresController);
+app.get('/manufacturers', authenticateJWT, getAllManufacturersController);
 
 
 (async () => {

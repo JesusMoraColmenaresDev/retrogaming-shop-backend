@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { createManufacturer } from './manufacturerService';
+import { createManufacturer, getAllManufacturers } from './manufacturerService';
 import { ApiError } from '../../utils/ApiError';
 
 export const createManufacturerController = async (req: Request, res: Response) => {
@@ -18,3 +18,11 @@ export const createManufacturerController = async (req: Request, res: Response) 
   }
 };
 
+export const getAllManufacturersController = async (req: Request, res: Response) => {
+  try {
+    const manufacturers = await getAllManufacturers();
+    res.status(200).json(manufacturers);
+  } catch (err) {
+    res.status(500).json({ code: 'MANUFACTURER_FETCH_ERROR' });
+  }
+};

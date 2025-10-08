@@ -21,6 +21,7 @@ export const createGenreController = async (req: Request, res: Response) => {
 export const getAllGenresController = async (req: Request, res: Response) => {
   try {
     const genres = await getAllGenres();
+    console.log(genres);
     res.status(200).json(genres);
   } catch (err) {
     res.status(500).json({ code: 'GENRE_FETCH_ERROR' });
